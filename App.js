@@ -1,0 +1,77 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ */
+
+import React, {Component} from 'react';
+import {StyleSheet, View} from 'react-native';
+import PlaceInput from './src/component/PlaceInput/PlaceInput';
+import PlaceList from './src/component/PlaceList/PlaceList';
+// import placeImage from './src/assets/1.png';
+import PlaceDetail from './src/component/PlaceDetail/PlaceDetail';
+import { addPlace, deletePlace, deselectPlace, selectPlace } from './src/store/actions/index';
+import { connect } from 'react-redux';
+class App extends Component {
+
+  placeAddedHandler = placeName => {      
+    this.props.onAddPlace(placeName);
+  }
+  
+  placeSelectedHandler = key => {    
+    this.props.onSelectPlace(key);
+    
+  };
+
+  placeDeletedHandler = () => {
+    this.props.onDeletePlace();
+  }
+
+  modalClosedHandler = () => {
+    this.props.onDeselectPlace();
+  }
+
+  render() {
+    
+    return (
+      <View style={styles.container}> 
+        <PlaceDetail selectedPlace={this.props.selectedPlace} onItemDeleted={this.placeDeletedHandler} onModalClosed={this.modalClosedHandler} />
+        <PlaceInput onPlaceAdded={this.placeAddedHandler}></PlaceInput>       
+        <PlaceList 
+          places={this.props.places} 
+          onItemSelected={this.placeSelectedHandler}
+        ></PlaceList>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {    
+    flex: 1,
+    padding:26,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  }  
+});
+
+const mapStateToProps = state => {
+  return {
+    places: state.places.places,
+    selectedPlace: state.places.selectedPlace
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddPlace: (name) => dispatch(addPlace(name)),
+    onDeletePlace: () => dispatch(deletePlace()),
+    onSelectPlace: (key) => dispatch(selectPlace(key)),
+    onDeselectPlace: () => dispatch(deselectPlace())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
