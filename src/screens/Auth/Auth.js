@@ -1,25 +1,34 @@
 import React, { Component } from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, ImageBackground } from 'react-native';
 
 import startMainTabs from '../MainTabs/startMainTabs';
-import DefaultInput from '../../component/UI/DefaultInput';
+import DefaultInput from '../../component/UI/DefaultInput/DefaultInput';
+import HeadingText from '../../component/UI/HeadingText/HeadingText';
+import MainText from '../../component/UI/MainText/MainText';
+import ButtonWithBackground from '../../component/UI/ButtonWithBackground/ButtonWithBackground';
+import backgroundImage from '../../assets/1.png';
+
 class AuthScreen extends Component {
 
     loginHandler = () => {
         startMainTabs();
     }
     render () {
-        return (
+        return ( 
+            <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
             <View style={styles.container}>
-                <Text>Please Log In</Text>
-                <Button title="Switch to Login" onPress={this.loginHandler} />
+                <MainText>
+                    <HeadingText>Please Log In</HeadingText>
+                </MainText>
+                <ButtonWithBackground color="#29aaf4" onPress={() => alert('Hello~!!')}>Switch to Login</ButtonWithBackground>
                 <View style={styles.inputContainer}>
-                    <DefaultInput placeholder="Your E-Mail Address" />
-                    <DefaultInput placeholder="Password" />
-                    <DefaultInput placeholder="Confirm Password" />
+                    <DefaultInput placeholder="Your E-Mail Address" style={styles.input} />
+                    <DefaultInput placeholder="Password" style={styles.input} />
+                    <DefaultInput placeholder="Confirm Password" style={styles.input} />
                 </View>
-                <Button title="Submit" onPress={this.loginHandler} />                
+                <ButtonWithBackground color="#29aaf4" onPress={this.loginHandler}>Submit</ButtonWithBackground>
             </View>
+            </ImageBackground>
         );
     }
 }
@@ -27,18 +36,20 @@ class AuthScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
     },
     inputContainer: {
         width: "80%"
+    },    
+    input: {        
+        backgroundColor: "#eee",
+        borderColor: "#bbb"
+        
     },
-    input: {
+    backgroundImage: {
         width: "100%",
-        borderWidth: 1,
-        borderColor: "#eee",
-        padding: 5,
-        margin: 8
+        flex: 1
     }
 });
 
