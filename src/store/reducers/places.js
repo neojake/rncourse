@@ -14,7 +14,8 @@ const reducer = (state = initialState, action) => {
                     name: action.placeName,
                     image: {
                         uri: "https://thai.monkeytravel.com/globals/common/kr/img/detail/collection/mk_rolling01.jpg?v=1"
-                    }
+                    },
+                    location: action.location
                 })
             };
         case DELETE_PLACE:

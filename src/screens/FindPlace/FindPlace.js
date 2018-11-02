@@ -97,6 +97,7 @@ class FindPlaceScreen extends Component {
           }}>
         <PlaceList
           places={this.props.places}
+          location={this.props.location}
           onItemSelected={this.itemSelectedHandler} />
         </Animated.View>
       );
@@ -131,7 +132,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    places: state.places.places
+    places: state.places.places,
+    location: state.places.location
   }
 }
 

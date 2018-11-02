@@ -3,11 +3,19 @@ import { View, Image, Text, StyleSheet, TouchableOpacity, Platform, Dimensions }
 import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux';
 import { deletePlace } from '../../store/actions/index';
+import MapView from 'react-native-maps';
 
 class PlaceDetailScreen extends Component {    
 
     state = {
-        viewMode : "portrait"
+        viewMode : "portrait",
+        focusedLocation: {
+            latitude: 37.7900352,
+            longitude: -122.4013726,
+            latitudeDelta: 0.0122,
+            longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122,
+            locationChosen: false,
+        }
     }
 
     constructor(props) {
@@ -15,6 +23,10 @@ class PlaceDetailScreen extends Component {
       Dimensions.addEventListener("change", this.updateStyles);
     }
     
+    componentDidMount() {
+        this.getInitialRegion();
+    }
+
     componentWillUnmount() {
         Dimensions.removeEventListener("change", this.updateStyles);
     }
@@ -30,11 +42,36 @@ class PlaceDetailScreen extends Component {
         this.props.navigator.pop();
     }
 
+    getInitialRegion = () => {
+        this.setState(prevState => {
+            return {
+                focusedLocation: {
+                    ...prevState.focusedLocation,
+                    latitude: this.props.selectedPlace.location.latitude,
+                    longitude: this.props.selectedPlace.location.longitude
+                },                
+            }
+        });
+    }
+
     render () {
+    
         return (
             <View style={[styles.container, this.state.viewMode === 'portrait' ? styles.portraitContainer : styles.landscapeContainer]}>
                 <View style={styles.subContainer}>
-                    <Image source={this.props.selectedPlace.image} style={styles.placeImage} />                    
+                    <Image source={this.props.selectedPlace.image}
+                        style={styles.placeImage}
+                    />
+                </View>
+                <View style={styles.subContainer}>
+                <MapView  
+                    initialRegion={this.state.focusedLocation}                   
+                    style={styles.map}                                        
+                    ref={ref => this.map = ref}
+
+                >
+                    <MapView.Marker coordinate={this.props.selectedPlace.location} title="You clicked!" />
+                </MapView>
                 </View>
                 <View>
                     <View>
@@ -78,8 +115,13 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         flex: 1
-    }
+    },
+    map: {
+        width: "100%",
+        height: 250,
+    },
 })
+
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -87,5 +129,5 @@ const mapDispatchToProps = dispatch => {
     };
 }
 
-export default connect(null, mapDispatchToProps)(PlaceDetailScreen);
+export default connect(null,mapDispatchToProps)(PlaceDetailScreen);
 
