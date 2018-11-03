@@ -75,7 +75,7 @@ class PlaceDetailScreen extends Component {
                 </View>
                 <View>
                     <View>
-                        <Text style={styles.placeName}>{this.props.selectedPlace.name}</Text>
+                        <Text style={styles.placeName}>{this.props.selectedPlace.placeName}</Text>
                     </View>
                     <View>
                         <TouchableOpacity onPress={this.placeDeleteHandler}>
